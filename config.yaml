@@ -1,0 +1,100 @@
+# 跑步姿势分析配置文件
+# Running Pose Analysis Configuration
+
+# YOLO模型配置
+model:
+  name: "yolov8x-pose.pt"  # 可选: yolov8n-pose, yolov8s-pose, yolov8m-pose, yolov8l-pose, yolov8x-pose
+  confidence: 0.5           # 检测置信度阈值
+  iou: 0.45                 # NMS IOU阈值
+  device: "cuda"            # cuda 或 cpu
+
+# 视频处理配置
+video:
+  fps_sample: null          # 采样帧率，null表示使用原视频帧率
+  resize_width: null        # 调整视频宽度，null表示不调整
+  skip_frames: 1            # 跳帧处理，1表示处理每一帧
+
+# 分析参数阈值（基于运动医学标准）
+thresholds:
+  # 前后躯干倾斜 (度)
+  trunk_tilt:
+    good: 10
+    mediocre_range: [11, 14]
+    
+  # 膝关节屈曲 (度)
+  knee_flexion:
+    good_range: [35, 40]
+    mediocre_range: [30, 35]
+    
+  # 踝关节跖屈 (度)
+  ankle_plantar:
+    good_max: 6
+    mediocre_range: [9, 10]
+    
+  # 髋关节内收 (度)
+  hip_adduction:
+    good_max: 9
+    mediocre_range: [9, 11]
+    
+  # 骨盆下降 (度)
+  pelvic_drop:
+    good_max: 1
+    mediocre_range: [1, 2]
+    
+  # 小腿内外翻 (度，正值为外翻)
+  calcaneal_rotation:
+    good_min: 0
+    mediocre_range: [-10, 0]
+    
+  # 步频 (步/分钟)
+  cadence:
+    good_range: [170, 180]
+    mediocre_range: [160, 170]
+
+# 关键点索引 (COCO格式)
+keypoints:
+  nose: 0
+  left_eye: 1
+  right_eye: 2
+  left_ear: 3
+  right_ear: 4
+  left_shoulder: 5
+  right_shoulder: 6
+  left_elbow: 7
+  right_elbow: 8
+  left_wrist: 9
+  right_wrist: 10
+  left_hip: 11
+  right_hip: 12
+  left_knee: 13
+  right_knee: 14
+  left_ankle: 15
+  right_ankle: 16
+
+# 平滑处理配置
+smoothing:
+  enabled: true
+  window_size: 5           # 滑动窗口大小
+  method: "savgol"         # 平滑方法: savgol, gaussian, median
+
+# 步态检测配置
+gait:
+  min_stride_frames: 10    # 最小步幅帧数
+  foot_speed_threshold: 2.0 # 脚部速度阈值（像素/帧）
+
+# 报告生成配置
+report:
+  output_format: "html"    # html, json, pdf
+  include_video: true      # 是否在报告中包含标注视频
+  include_plots: true      # 是否包含图表
+  language: "zh"           # zh 或 en
+
+# 可视化配置
+visualization:
+  skeleton_color: [0, 255, 0]      # 骨架颜色 (BGR)
+  keypoint_color: [0, 0, 255]      # 关键点颜色 (BGR)
+  angle_text_color: [255, 255, 0]  # 角度文本颜色 (BGR)
+  line_thickness: 2
+  keypoint_radius: 4
+  show_confidence: true
+
